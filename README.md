@@ -1,2 +1,2 @@
 # Dynamical-System
-Study of Dynamical System
+Study of Dynamical Systems
