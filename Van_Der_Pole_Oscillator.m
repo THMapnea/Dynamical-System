@@ -59,7 +59,7 @@ for x1_0 = x1_0_vals
         subplot(2, 2, 1);
         hold on;
         plot(X(:,1), X(:,2));  % Plot trajectory in phase space
-        title("Phase Portrait with Initial Condition Grid");
+        title("Phase Plot with Initial Condition Grid");
         xlabel("x_1(t) = v_C(t)");
         ylabel("x_2(t) = i_C(t)");
         grid on;
