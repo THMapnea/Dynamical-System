@@ -5,12 +5,12 @@ clc, clear, close all;  % Clear command window, workspace, and close all figures
 %     _________________________
 %    |       |       |         |
 %    |       |       |         |
-%    |       |       |         |
+%    |       |       | Cg      |
 %    |       (      (|)      _____ 
-%   (-)       )      |       _____
-%    |       (       |         |
+%   (-)    L  )      |     C _____
+%    | V     (       |         |
 %    |       |       |         | 
-%    |       |     |_\/_|      |
+%    |       |  TD |_\/_|      |
 %    |_______|_______|_________|
 %
 % Where:
@@ -88,7 +88,7 @@ initial_condition = [0.01; 0]; % [x1(0); x2(0)]
 [T, X] = ode45(vdp, t_span, initial_condition);
 
 % Create a new figure for the time evolution
-subplot(2,2,[3,4);
+subplot(2,2,[3,4]);
 hold on;
 
 % Plot x1(t) vs time
