@@ -1,4 +1,4 @@
-function [params, case_name] = generate_heart_parameters(case_type)
+function [params, case_name] = generate_heart_parameters_three_oscillators(case_type)
 % GENERATE_HEART_PARAMETERS Returns parameter sets for different heart rhythm cases
 %   Input: case_type (string) - can be:
 %       'normal'    : Healthy heart rhythm

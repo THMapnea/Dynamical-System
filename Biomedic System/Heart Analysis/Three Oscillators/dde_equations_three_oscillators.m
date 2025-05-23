@@ -1,4 +1,4 @@
-function dydt = dde_equations(t, y, Z, params)
+function dydt = dde_equations_three_oscillators(t, y, Z, params)
     % Extract current states
     x1 = y(1); x2 = y(2);  % SA node
     x3 = y(3); x4 = y(4);  % AV node
