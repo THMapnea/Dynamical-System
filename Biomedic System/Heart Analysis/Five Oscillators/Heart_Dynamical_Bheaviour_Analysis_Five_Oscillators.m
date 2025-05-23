@@ -181,7 +181,7 @@ lags = [params.tau12, params.tau13, params.tau21, params.tau23, ...
 % -------------------------------
 % 9. Time Span for Simulation
 % -------------------------------
-tspan = 0:0.01:30;  % Simulate for 30 seconds with 0.01s steps
+tspan = 0:0.01:100;  % Simulate for 30 seconds with 0.01s steps
 
 % -------------------------------
 % 10. Solution of the DDE
@@ -244,7 +244,7 @@ for i = 1:4
     title(['Time Traces: ' case_titles(cases{i})], 'FontSize', 12);
     xlabel('Time (s)'); ylabel('Potential (mV)');
     legend({'SA node', 'AV node', 'His bundle', 'LBB', 'RBB'}, 'Location', 'best');
-    grid on; ylim([-1.2 1.2]);
+    grid on; ylim([-2 2]);
     set(gca, 'FontWeight', 'bold');
     
     % ECG Plot
@@ -350,7 +350,7 @@ xlabel('Time (s)', 'FontWeight', 'bold');
 ylabel('ECG Amplitude (mV)', 'FontWeight', 'bold');
 legend(p, 'Location', 'northeast');
 grid on; 
-xlim([0 5]); % Focus on first 5 seconds for clarity
+xlim([0 100]); 
 ylim([-2 2]);
 set(gca, 'FontWeight', 'bold', 'LineWidth', 1.5);
 
