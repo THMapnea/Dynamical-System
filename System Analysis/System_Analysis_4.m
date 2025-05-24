@@ -16,8 +16,7 @@ clc, clear, close all;
 %
 %  For h = 3 when t ≤ 0 and h = 2 when t > 0, plot the forced output response in the time interval 
 %   [-5 10] seconds, when the input signal to the system is u(t) = 1 + sin(t), ∀t ∈ R. 
-%   [Hint: Consider the response for t ≤ 0 and save it in one vector. Consider the response for t > 0 
-%   and save it in another vector. Combine the plot using both vectors.]
+
 
 
 
