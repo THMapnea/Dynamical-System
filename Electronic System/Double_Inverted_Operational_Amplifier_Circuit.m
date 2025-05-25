@@ -93,7 +93,7 @@ u_sin = sin(t_span);
 
 
 %we can see the response to a monolateral exponential
-u_exp = exp(t_span) .* heaviside(t_span);
+u_exp = exp(-t_span) .* heaviside(t_span);
 [y_exp, t_exp, x_exp] = lsim(sys, u_exp, t_span);
 
 
@@ -108,7 +108,7 @@ u_ramp = t_span .* heaviside(t_span);
 
 
 %we can also compute the response to a parabola
-u_parab = 0.5 * t_span.^2 .* heaviside(t_span);
+u_parab = 0.5 * t_span.^2;
 [y_parab, t_parab, x_parab] = lsim(sys, u_parab, t_span);
 
 
@@ -155,113 +155,85 @@ end
     
 
 %plotting the results
-figure("Position", [100, 100, 1200, 800]);
-subplot(3, 3, 1);
-plot(t_free, y_free, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Free evolution of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_free(end)]); % Show full time range
+figure("Position", [50, 10, 1200, 800]);
 
 
-%impulse response
-subplot(3, 3, 2);
-plot(t_imp, y_imp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Impulse Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_imp(end)]); % Show full time range
+% Define plot data and titles
+response_plots = {
+    {'Free Evolution', t_free, y_free}, 
+    {'Impulse Response', t_imp, y_imp},
+    {'Step Response', t_step, y_step},
+    {'Sinusoidal Response', t_sin, y_sin},
+    {'Exponential Response', t_exp, y_exp},
+    {'Rectangular Response', t_rect, y_rect},
+    {'Ramp Response', t_ramp, y_ramp},
+    {'Parabolic Response', t_parab, y_parab},
+    {'Hyperbolic Response', t_hyp, y_hyp}
+};
 
 
-%step response
-subplot(3, 3, 3);
-plot(t_step, y_step, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Step Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_step(end)]); % Show full time range
+% Plot all responses
+for i = 1:9
+    subplot(3, 3, i);
+    plot(response_plots{i}{2}, response_plots{i}{3}, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+    grid on;
+    title(response_plots{i}{1}, 'FontSize', 12);
+    xlabel('Time (seconds)', 'FontSize', 10);
+    ylabel('Amplitude', 'FontSize', 10);
+    xlim([0 response_plots{i}{2}(end)]);
+end
 
 
-%sin response
-subplot(3, 3, 4);
-plot(t_sin, y_sin, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Sinusoidal Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_sin(end)]); % Show full time range
-
-
-%exponential response
-subplot(3, 3, 5);
-plot(t_exp, y_exp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Exponential Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_exp(end)]); % Show full time range
-
-
-%rect response
-subplot(3, 3, 6);
-plot(t_rect, y_rect, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Rect Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_rect(end)]); % Show full time range
-
-
-%ramp response
-subplot(3, 3, 7);
-plot(t_ramp, y_ramp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Ramp Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_ramp(end)]); % Show full time range
-
-%parabola response
-subplot(3, 3, 8);
-plot(t_parab, y_parab, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Parabola Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_parab(end)]); % Show full time range
-
-
-%Hyperbole response
-subplot(3, 3, 9);
-plot(t_hyp, y_hyp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
-grid on;
-title('Hyperbole Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
-xlabel('Time (seconds)', 'FontSize', 12);
-ylabel('Amplitude', 'FontSize', 12);
-set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
-xlim([0 t_hyp(end)]); % Show full time range
-
-
-% Improve overall figure appearance
-sgtitle('Dynamic Analysis of 5th-Order RLC Network', 'FontSize', 16, 'FontWeight', 'bold');
+sgtitle('System Responses to Different Inputs', 'FontSize', 16, 'FontWeight', 'bold');
 set(gcf, 'Color', 'w');
 
-figure("Position", [200,200, 600, 800]);
-subplot(2, 1, 1);
-bode(G);
-grid on;
-subplot(2,1,2);
-nyquist(G);
-grid on;
-fprintf("the static gain of the circuit is: %.2f\n",static_gain);
+
+% State Trajectories with custom colors
+state_colors = [
+    0.00 0.45 0.74;  % x1 - Blue
+    0.85 0.33 0.10;  % x2 - Orange
+    0.93 0.69 0.13;  % x3 - Yellow
+    0.49 0.18 0.56;  % x4 - Purple
+    0.47 0.67 0.19   % x5 - Green
+];
+
+
+figure("Position", [50, 10, 1200, 1000]);
+
+
+trajectory_data = {
+    {'Free Evolution', t_free, x_free},
+    {'Impulse Response', t_imp, x_imp},
+    {'Step Response', t_step, x_step},
+    {'Sinusoidal Response', t_sin, x_sin},
+    {'Exponential Response', t_exp, x_exp},
+    {'Rectangular Response', t_rect, x_rect},
+    {'Ramp Response', t_ramp, x_ramp},
+    {'Parabolic Response', t_parab, x_parab},
+    {'Hyperbolic Response', t_hyp, x_hyp}
+};
+
+
+for i = 1:9
+    subplot(3, 3, i);
+    hold on;
+    for state = 1:5
+        plot(trajectory_data{i}{2}, trajectory_data{i}{3}(:,state), ...
+             'LineWidth', 2, 'Color', state_colors(state,:));
+    end
+    hold off;
+    
+    grid on;
+    title(trajectory_data{i}{1}, 'FontSize', 12);
+    xlabel('Time (seconds)', 'FontSize', 10);
+    ylabel('State Value', 'FontSize', 10);
+    xlim([0 trajectory_data{i}{2}(end)]);
+    
+    if i == 1
+        legend({'x_1','x_2','x_3','x_4','x_5'}, 'Location', 'best');
+    end
+end
+
+
+sgtitle('State Trajectories for Different Inputs', 'FontSize', 16, 'FontWeight', 'bold');
+set(gcf, 'Color', 'w');
