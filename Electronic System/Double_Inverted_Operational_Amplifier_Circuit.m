@@ -15,7 +15,7 @@ clc; clear; close all;
 %    |             | |     - |  \__________________|__| |___/\/\/\/\__|__|  \_________________|__| |___/\/\/\/\__
 %   (|)u(t)         C1       |  /                     | |              - |  /                    | |             |
 %    |_______________________| /                       C2                | /                      C3             |   
-%    |                     + |/   _____________________________________+ |/                                      |   
+%    |                     + |/   _____________________________________+_|/                                      |   
 %    |___________________________|                                                                               |
 %    |                                                                                                           |   
 %    |___________________________________________________________________________________________________________|
@@ -65,3 +65,36 @@ B = [ 1/(R1*C1);
 C = [ -R2*R4/(R1*R3), -R2*R4/R3, R4/R3, R4, -1 ];
 
 D = R2*R4/(R1*R3);
+
+
+%then we can define the system
+sys = ss(A, B, C, D);
+
+
+%then we can see the response to an impulse
+[y_imp, t_imp, x_imp] = impulse(sys);
+
+
+
+
+
+
+
+
+
+%plotting the results
+% Plotting the impulse response
+figure("Position", [100, 100, 1200, 800]);
+subplot(2, 2, [1 2]);
+plot(t_imp, y_imp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Impulse Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_imp(end)]); % Show full time range
+
+
+% Improve overall figure appearance
+sgtitle('Dynamic Analysis of 5th-Order RLC Network', 'FontSize', 16, 'FontWeight', 'bold');
+set(gcf, 'Color', 'w');
