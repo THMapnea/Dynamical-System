@@ -70,22 +70,104 @@ D = R2*R4/(R1*R3);
 %then we can define the system
 sys = ss(A, B, C, D);
 
+%we can also define the initial condition
+initial_condition = [1, 1, 1, 1, 1];
+
+
+%we can also search the free evolution of the system
+[y_free, t_free, x_free] = initial(sys, initial_condition);
+
 
 %then we can see the response to an impulse
 [y_imp, t_imp, x_imp] = impulse(sys);
 
 
+%we can then compute the step response
+t_span = -10 : 1e-3 : 10;
+[y_step, t_step, x_step] = step(sys);
+
+
+%we can also see it's response to a sinusoidal input
+u_sin = sin(t_span);
+[y_sin, t_sin, x_sin] = lsim(sys, u_sin, t_span);
+
+
+%we can see the response to a monolateral exponential
+u_exp = exp(t_span) .* heaviside(t_span);
+[y_exp, t_exp, x_exp] = lsim(sys, u_exp, t_span);
+
+
+%we can also see how it reacts to a rectangular impulse of amplitude 1
+u_rect = heaviside(t_span  + 0.5) - heaviside(t_span -0.5);
+[y_rect, t_rect, x_rect] = lsim(sys, u_rect, t_span);
+
+
+%we can also compute the response to a ramp signal
+u_ramp = t_span .* heaviside(t_span);
+[y_ramp, t_ramp, x_ramp] = lsim(sys, u_ramp, t_span);
+
+
+%we can also compute the response to a parabola
+u_parab = 0.5 * t_span.^2 .* heaviside(t_span);
+[y_parab, t_parab, x_parab] = lsim(sys, u_parab, t_span);
+
+
+%we can also compute the response to a hyperbolical signal
+t_span_hyp = 1e-6 : 0.01 : 10;
+u_hyp = 1 ./ t_span_hyp;
+[y_hyp, t_hyp, x_hyp] = lsim(sys, u_hyp, t_span_hyp);
+
+%we can now compute the transfer function and observe it's bode and nyquist plot
+G = tf(sys);
+static_gain = dcgain(G);
 
 
 
 
+%we can now study the stability of the circuit
+eigenvalues = eig(A);
+if all(real(eigenvalues) < 0)
+    fprintf("the circuit is asymptotically stable\n");
+elseif any(real(eigenvalues) > 0)
+    fprintf("the system is unstable\n");
+else
+    fprintf("the system is marginally stable\n");
+end
 
 
+%we will now study the reachability(controllability) and the observability
+CM = ctrb(A, B);
+CM_rank = rank(CM);
+OM = obsv(A, C);
+OM_rank = rank(OM);
+if CM_rank == size(A, 1)
+    fprintf("the system is reachable(controllable)\n");
+else
+    fprintf("the system is not rechable(not controllable)\n");
+end
+
+
+if OM_rank == size(A, 1)
+    fprintf("the system is observable\n");
+else
+    fprintf("the system is not observable\n");
+end  
+    
 
 %plotting the results
-% Plotting the impulse response
 figure("Position", [100, 100, 1200, 800]);
-subplot(2, 2, [1 2]);
+subplot(3, 3, 1);
+plot(t_free, y_free, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Free evolution of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_free(end)]); % Show full time range
+
+
+%impulse response
+subplot(3, 3, 2);
 plot(t_imp, y_imp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
 grid on;
 title('Impulse Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
@@ -95,6 +177,91 @@ set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
 xlim([0 t_imp(end)]); % Show full time range
 
 
+%step response
+subplot(3, 3, 3);
+plot(t_step, y_step, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Step Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_step(end)]); % Show full time range
+
+
+%sin response
+subplot(3, 3, 4);
+plot(t_sin, y_sin, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Sinusoidal Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_sin(end)]); % Show full time range
+
+
+%exponential response
+subplot(3, 3, 5);
+plot(t_exp, y_exp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Exponential Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_exp(end)]); % Show full time range
+
+
+%rect response
+subplot(3, 3, 6);
+plot(t_rect, y_rect, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Rect Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_rect(end)]); % Show full time range
+
+
+%ramp response
+subplot(3, 3, 7);
+plot(t_ramp, y_ramp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Ramp Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_ramp(end)]); % Show full time range
+
+%parabola response
+subplot(3, 3, 8);
+plot(t_parab, y_parab, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Parabola Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_parab(end)]); % Show full time range
+
+
+%Hyperbole response
+subplot(3, 3, 9);
+plot(t_hyp, y_hyp, 'LineWidth', 2, 'Color', [0, 0.4470, 0.7410]);
+grid on;
+title('Hyperbole Response of 5th-Order RLC Network', 'FontSize', 14, 'FontWeight', 'bold');
+xlabel('Time (seconds)', 'FontSize', 12);
+ylabel('Amplitude', 'FontSize', 12);
+set(gca, 'GridLineStyle', '--', 'GridAlpha', 0.3);
+xlim([0 t_hyp(end)]); % Show full time range
+
+
 % Improve overall figure appearance
 sgtitle('Dynamic Analysis of 5th-Order RLC Network', 'FontSize', 16, 'FontWeight', 'bold');
 set(gcf, 'Color', 'w');
+
+figure("Position", [200,200, 600, 800]);
+subplot(2, 1, 1);
+bode(G);
+grid on;
+subplot(2,1,2);
+nyquist(G);
+grid on;
+fprintf("the static gain of the circuit is: %.2f\n",static_gain);
