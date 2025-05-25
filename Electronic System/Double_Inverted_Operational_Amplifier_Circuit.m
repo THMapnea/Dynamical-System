@@ -34,3 +34,34 @@ clc; clear; close all;
 % y(t) = -R2*R4/(R1*R3)*x1(t) - R2*R4/R3*x2(t) + R4/R3*x3(t) + R4*x4(t) - x5(t) + R2*R4/(R1*R3)*u(t)
 % The resulting system is dynamic, continuous-time, LTI, SISO, proper, of fifth order
 %we will proceed with a quick analysis of the circuit
+
+%we first define some values for the resistence inductance etc
+R1 = 1e3;    % 1 kΩ
+R2 = 2.2e3;  % 2.2 kΩ
+R3 = 4.7e3;  % 4.7 kΩ
+R4 = 3.3e3;  % 3.3 kΩ
+R5 = 1e3;    % 1 kΩ
+
+C1 = 10e-6;  % 10 μF
+C2 = 22e-9;  % 22 nF
+C3 = 100e-9; % 100 nF
+
+L1 = 10e-3;  % 10 mH
+L2 = 4.7e-3; % 4.7 mH
+
+%we create the various matrices
+A = [ -1/(R1*C1),            0,                 0,                 0,                 0;
+      -R2/(R1*L1),        -R2/L1,               0,                 0,                 0;
+      R2/(R1*R3*C2),    R2/(R3*C2),      -1/(R3*C2),               0,                 0;
+      R2*R4/(R1*R3*L2), R2*R4/(R3*L2), -R4/(R3*L2),          -R4/L2,                 0;
+     -R2*R4/(R1*R3*R5*C3), -R2*R4/(R3*R5*C3), R4/(R3*R5*C3), R4/(R5*C3), -1/(R5*C3)];
+
+B = [ 1/(R1*C1);
+      R2/(R1*L1);
+     -R2/(R1*R3*C2);
+     -R2*R4/(R1*R3*L2);
+      R2*R4/(R1*R3*R5*C3)];
+
+C = [ -R2*R4/(R1*R3), -R2*R4/R3, R4/R3, R4, -1 ];
+
+D = R2*R4/(R1*R3);
