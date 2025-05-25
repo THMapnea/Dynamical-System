@@ -56,18 +56,18 @@ for i = 1 : length(alpha_values)
         CC = ctrb(A, B);
         CC_rank = rank(CC);
         if CC_rank == size(A, 1)
-            fprintf("  System is fully reachable (controllable).\n");
+            fprintf("System is fully reachable (controllable).\n");
         else
-            fprintf("  System is PARTIALLY REACHABLE (rank=%d). Unreachable modes:\n", CC_rank);
+            fprintf("System is PARTIALLY REACHABLE (rank=%d). Unreachable modes:\n", CC_rank);
             
 
-            % PBH test to identify unreachable eigenvalues
-            for k = 1:length(eigenvalues)
-                pb_matrix = [A - eigenvalues(k)*eye(2), B];
-                if rank(pb_matrix) < size(A, 1)
-                    fprintf("    λ=%.2f is UNREACHABLE (PBH rank deficient)\n", eigenvalues(k));
-                end
+        % PBH test to identify unreachable eigenvalues
+        for k = 1:length(eigenvalues)
+            pb_matrix = [A - eigenvalues(k)*eye(2), B];
+            if rank(pb_matrix) < size(A, 1)
+                fprintf("λ=%.2f is UNREACHABLE (PBH rank deficient)\n", eigenvalues(k));
             end
+        end
         end
 
 
@@ -75,16 +75,16 @@ for i = 1 : length(alpha_values)
         O = obsv(A, C);
         O_rank = rank(O);
         if O_rank == size(A, 1)
-            fprintf("  System is fully observable.\n");
+            fprintf("System is fully observable.\n");
         else
-            fprintf("  System is PARTIALLY OBSERVABLE (rank=%d). Unobservable modes:\n", O_rank);
+            fprintf("System is PARTIALLY OBSERVABLE (rank=%d). Unobservable modes:\n", O_rank);
             
 
             % PBH test to identify unobservable eigenvalues
             for k = 1:length(eigenvalues)
                 pb_matrix = [A - eigenvalues(k)*eye(2); C];
                 if rank(pb_matrix) < size(A, 1)
-                    fprintf("    λ=%.2f is UNOBSERVABLE (PBH rank deficient)\n", eigenvalues(k));
+                    fprintf("λ=%.2f is UNOBSERVABLE (PBH rank deficient)\n", eigenvalues(k));
                 end
             end
         end
