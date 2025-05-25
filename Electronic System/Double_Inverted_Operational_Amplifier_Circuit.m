@@ -2,7 +2,7 @@ clc; clear; close all;
 
 %
 %
-%                                     R2                                         R4            
+%                                     R2                                         R4                                          
 %                          ________/\/\/\/\_________                  ________/\/\/\/\_________
 %                          |                       |                  |                       |
 %                          |                       |                  |                       |
@@ -237,3 +237,13 @@ end
 
 sgtitle('State Trajectories for Different Inputs', 'FontSize', 16, 'FontWeight', 'bold');
 set(gcf, 'Color', 'w');
+
+
+%bode and nyquist plotting
+figure("Position", [50, 10, 1200, 1000]);
+subplot(2,1,1);
+bode(G);
+grid on;
+subplot(2, 1, 2);
+nyquist(G);
+grid on;
